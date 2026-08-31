@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="cyber">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0b10">
+    <title>SISTEMA EGÓICO — Hub Oficial 24/7</title>
+    
+    <style>
+        :root {
+            --font-scale: 1;
+            --bg-main: #0a0b10;
+            --bg-card: rgba(18, 20, 32, 0.92);
+            --bg-card-border: rgba(0, 240, 255, 0.2);
+            --aespa-cyan: #00f0ff;
+            --aespa-purple: #bd00ff;
+            --aespa-glow: rgba(0, 240, 255, 0.4);
+            --poppy-pink: #ff2a85;
+            --calm-green: #00e676;
+            --calm-blue: #00b0ff;
+            --rpg-gold: #ffd700;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+        }
+
+        [data-theme="dark-zen"] {
+            --bg-main: #050508;
+            --bg-card: #111116;
+            --bg-card-border: rgba(255, 255, 255, 0.08);
+            --aespa-cyan: #64b5f6;
+            --aespa-purple: #9575cd;
+            --aespa-glow: none;
+            --poppy-pink: #f06292;
+            --calm-green: #81c784;
+            --calm-blue: #4fc3f7;
+            --rpg-gold: #fff176;
+            --text-primary: #e2e8f0;
+            --text-secondary: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: calc(13px * var(--font-scale));
+            min-height: 100vh;
+            padding-bottom: 85px;
+            overflow-x: hidden;
+            transition: background 0.25s, color 0.25s;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 11, 16, 0.96);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--bg-card-border);
+            padding: 8px 12px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .app-title {
+            font-size: calc(14px * var(--font-scale));
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--aespa-cyan), var(--poppy-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .controls-bar {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+        }
+
+        .btn-ctrl {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--bg-card-border);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 14px;
+            font-size: calc(10px * var(--font-scale));
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-telegram-active { background: rgba(0, 230, 118, 0.15); border-color: var(--calm-green); color: var(--calm-green); }
+        .btn-telegram-paused { background: rgba(255, 23, 68, 0.2); border-color: #ff1744; color: #ff5252; }
+
+        .ticker-bar {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 6px;
+            padding: 4px 6px;
+            font-size: calc(10px * var(--font-scale));
+            text-align: center;
+        }
+
+        main { padding: 12px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+        }
+
+        .card-aespa { border-left: 4px solid var(--aespa-cyan); }
+        .card-poppy { border-left: 4px solid var(--poppy-pink); }
+        .card-gold { border-left: 4px solid var(--rpg-gold); }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: calc(12px * var(--font-scale));
+        }
+
+        .action-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--aespa-cyan), var(--aespa-purple));
+            color: #000;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: calc(11px * var(--font-scale));
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 16px;
+            margin-bottom: 10px;
+            border-left: 2px solid var(--aespa-cyan);
+            font-size: calc(11px * var(--font-scale));
+            line-height: 1.4;
+        }
+
+        .timeline-time { color: var(--aespa-cyan); font-weight: bold; }
+
+        .sos-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-main);
+            z-index: 9999;
+            padding: 16px;
+            overflow-y: auto;
+            flex-direction: column;
+        }
+        .sos-modal.active { display: flex; }
+
+        nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 11, 16, 0.96);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid var(--bg-card-border);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 8px 0 env(safe-area-inset-bottom, 8px);
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            font-size: calc(10px * var(--font-scale));
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .nav-btn.active { color: var(--aespa-cyan); }
+
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--aespa-cyan);
+            color: #000;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: bold;
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-top">
+            <div class="app-title">⚡ EGÓICO 24/7</div>
+            <div style="display: flex; gap: 4px; align-items: center;">
+                <button class="btn-ctrl" onclick="changeFontSize(-0.1)">A-</button>
+                <button class="btn-ctrl" onclick="changeFontSize(0.1)">A+</button>
+                <button class="btn-ctrl" onclick="toggleTheme()" id="theme-btn">🌙 ESCURO</button>
+            </div>
+        </div>
+
+        <div class="controls-bar">
+            <button class="btn-ctrl btn-telegram-active" id="tg-pause-btn" onclick="toggleTelegramPause()">🔔 TELEGRAM ATIVO</button>
+            <button class="btn-ctrl" style="border-color: #ff1744; color: #ff5252;" onclick="openSOSModal()">🚨 SOS PCD</button>
+            <button class="btn-ctrl" style="border-color: var(--calm-green); color: var(--calm-green);" onclick="openOfflineHub()">📦 OFFLINE</button>
+            <button class="btn-ctrl" style="border-color: var(--calm-blue); color: var(--calm-blue);" onclick="openBreathingModal()">🫁 RESPIRAÇÃO</button>
+        </div>
+
+        <div class="ticker-bar">
+            <div><span style="color:var(--text-secondary)">Motor:</span> <b style="color:var(--calm-green)">Ollama (R$0)</b></div>
+            <div><span style="color:var(--text-secondary)">Velocidade:</span> <b>42 tok/s</b></div>
+            <div><span style="color:var(--text-secondary)">Gasto:</span> <b style="color:var(--rpg-gold)">R$ 0,00</b></div>
+        </div>
+    </header>
+
+    <main>
+        <section class="tab-content active" id="tab-rotas">
+            <div class="card card-aespa">
+                <div class="card-header">
+                    <span>🧭 SYNK ROTA & PASSAGENS</span>
+                    <span style="color: var(--aespa-cyan); font-size: 10px;">AO VIVO</span>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">03/09 • 17:40</div>
+                    <div><b>Guarapuava ➔ SP:</b> Passe Livre ANTT (R$ 0,00) ou Meia PCD R$ 67,50.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">04/09 • 16:00</div>
+                    <div><b>Show aespa (Pacaembu):</b> Portão PCD Charles Miller.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">05/09 • 02:30</div>
+                    <div><b>SP ➔ Rio de Janeiro:</b> Meia PCD R$ 44,95 / Passe Livre.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">05/09 • 14:00</div>
+                    <div><b>Rock in Rio (Poppy):</b> Central Acessibilidade & Sala Sensorial.</div>
+                </div>
+                <div class="timeline-item" style="border-left:none;">
+                    <div class="timeline-time">06/09 • 09:00</div>
+                    <div><b>Retorno Flexível:</b> Rio ➔ Guarapuava / Floripa / SP.</div>
+                </div>
+            </div>
+
+            <div class="card card-gold">
+                <div class="card-header">
+                    <span>🎫 INGRESSOS PCD & ACOMPANHANTE</span>
+                    <span style="color: var(--calm-green); font-size: 10px;">🟢 24H ONLINE</span>
+                </div>
+                <div style="font-size: 11px; line-height: 1.5; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 6px;">
+                    <p><b>AESPA:</b> 👤 Meia: <b style="color:var(--calm-green)">R$ 245</b> | 👥 Combo: <b>R$ 490</b></p>
+                    <p style="margin-top: 4px;"><b>POPPY (RIR):</b> 👤 Meia: <b style="color:var(--calm-green)">R$ 197,50</b> | 👥 Combo: <b>R$ 395</b></p>
+                </div>
+                <button class="action-btn" onclick="syncTelegram()">🔍 DISPARAR VARREDURA AGORA</button>
+            </div>
+        </section>
+
+        <section class="tab-content" id="tab-myhub">
+            <div class="card card-aespa">
+                <div class="card-header">
+                    <span>💖 MY HUB — @infoaespabr & Trends</span>
+                    <span style="color: var(--aespa-cyan); font-size: 10px;">X / TWITTER</span>
+                </div>
+                <div style="font-size: 11px; line-height: 1.5;">
+                    <p>• <b>Fila PCD Pacaembu:</b> Triagem às 14h na Praça Charles Miller. Entrada antecipada 15h30.</p>
+                    <p style="margin-top: 6px;">• <b>Gravação no Pacaembu:</b> Pista Premium centro-esquerda (evita caixas de som e foca no telão <i>æ</i>).</p>
+                    <p style="margin-top: 6px;">• <b>Solos:</b> Karina (<i>Up</i>), Winter (<i>Spark</i>), Giselle (<i>Dopamine</i>), Ningning (<i>Bored!</i>).</p>
+                </div>
+                <button class="action-btn" onclick="window.open('https://x.com/infoaespabr', '_blank')">🐦 Abrir @infoaespabr no X</button>
+            </div>
+        </section>
+
+        <section class="tab-content" id="tab-poppy">
+            <div class="card card-poppy">
+                <div class="card-header">
+                    <span>💰 Poppy Radar & Vendas WhatsApp</span>
+                    <span style="color: var(--poppy-pink); font-size: 10px;">R$ 650 - R$ 1.250</span>
+                </div>
+                <input type="text" id="client-name" value="Quiosque Orla da Barra" style="width: 100%; background: #111; border: 1px solid var(--poppy-pink); color: #fff; padding: 6px; border-radius: 4px; font-size: 11px; margin-bottom: 6px;">
+                <button class="action-btn" style="background: linear-gradient(135deg, var(--poppy-pink), #7928ca); color: #fff;" onclick="copyPitch()">📋 Copiar Pitch de 30s</button>
+            </div>
+        </section>
+    </main>
+
+    <div class="sos-modal" id="sos-modal">
+        <div style="color: #ff1744; font-size: 18px; font-weight: 900; text-align: center; border-bottom: 2px solid #ff1744; padding-bottom: 8px;">
+            🚨 CARTÃO DE APOIO EMERGENCIAL (TEA)
+        </div>
+        <div style="font-size: 14px; line-height: 1.6; margin: 20px 0;">
+            <p>• <b>Sou uma pessoa autista (PCD) viajando sozinha.</b></p><br>
+            <p>• Estou em <b>sobrecarga sensorial aguda</b>.</p><br>
+            <p>• <b>O QUE PRECISO:</b> Ficar sentado em local calmo por 20 minutos.</p><br>
+            <p>• ⚠️ <b>NÃO</b> preciso de intervenção médica invasiva nem de toque físico.</p>
+        </div>
+        <button class="action-btn" style="background: #333; color: #fff;" onclick="closeSOSModal()">✕ FECHAR</button>
+    </div>
+
+    <div class="sos-modal" id="offline-modal">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--calm-green); padding-bottom: 8px;">
+            <b style="color: var(--calm-green);">📦 GUIA OFFLINE PCD & HORÁRIOS</b>
+            <button onclick="closeOfflineHub()" style="background: none; border: none; color: #fff; font-size: 18px;">✕</button>
+        </div>
+        <div style="margin: 12px 0; font-size: 11px; line-height: 1.5;">
+            <p>• <b>Lei 13.146/15:</b> Fura-fila legal em portões, alimentação e banheiros.</p>
+            <p style="margin-top: 6px;">• <b>Pacaembu:</b> Chegue às 15h no portão PCD da Charles Miller.</p>
+            <p style="margin-top: 6px;">• <b>Rock in Rio:</b> Chegue às 13h na Central de Acessibilidade (pulseira Área Elevada).</p>
+        </div>
+        <button class="action-btn" style="background: #333; color: #fff;" onclick="closeOfflineHub()">✕ FECHAR</button>
+    </div>
+
+    <div class="sos-modal" id="breathing-modal">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--calm-blue); padding-bottom: 8px;">
+            <b style="color: var(--calm-blue);">🫁 RESPIRAÇÃO GUIADA (4-4-4-4)</b>
+            <button onclick="closeBreathingModal()" style="background: none; border: none; color: #fff; font-size: 18px;">✕</button>
+        </div>
+        <div style="text-align: center; padding: 30px 0;">
+            <div id="breath-circle" style="width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, var(--calm-blue), var(--calm-green)); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #000; transition: transform 4s ease-in-out;">INICIAR</div>
+            <p id="breath-text" style="font-size: 12px; color: var(--text-secondary);">Toque para começar.</p>
+            <button class="action-btn" style="background: var(--calm-blue); color: #000; margin-top: 14px;" onclick="toggleBreathing()">Iniciar Ciclo</button>
+        </div>
+        <button class="action-btn" style="background: #333; color: #fff;" onclick="closeBreathingModal()">✕ FECHAR</button>
+    </div>
+
+    <div class="toast" id="toast">Ação concluída!</div>
+
+    <nav>
+        <button class="nav-btn active" onclick="switchTab('tab-rotas', this)">
+            <span>🧭</span><span>SYNK Rota</span>
+        </button>
+        <button class="nav-btn" onclick="switchTab('tab-myhub', this)">
+            <span>💖</span><span>MY Hub</span>
+        </button>
+        <button class="nav-btn" onclick="switchTab('tab-poppy', this)">
+            <span>💰</span><span>Poppy Radar</span>
+        </button>
+    </nav>
+
+    <script>
+        let fontScale = 1.0;
+        let isTgPaused = false;
+        let isBreathing = false;
+        let breathInterval;
+
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'cyber' ? 'dark-zen' : 'cyber';
+            document.documentElement.setAttribute('data-theme', next);
+            document.getElementById('theme-btn').innerText = next === 'cyber' ? '🌙 ESCURO' : '⚡ CYBER';
+            showToast('Tema alterado: ' + (next === 'cyber' ? 'Cyberpunk' : 'Escuro Zen'));
+        }
+
+        function changeFontSize(delta) {
+            fontScale = Math.min(Math.max(fontScale + delta, 0.8), 1.4);
+            document.documentElement.style.setProperty('--font-scale', fontScale);
+            showToast('Tamanho do texto: ' + Math.round(fontScale * 100) + '%');
+        }
+
+        function toggleTelegramPause() {
+            isTgPaused = !isTgPaused;
+            const btn = document.getElementById('tg-pause-btn');
+            if (isTgPaused) {
+                btn.className = 'btn-ctrl btn-telegram-paused';
+                btn.innerText = '🔕 TELEGRAM PAUSADO';
+                showToast('🔕 Notificações do Telegram Pausadas!');
+            } else {
+                btn.className = 'btn-ctrl btn-telegram-active';
+                btn.innerText = '🔔 TELEGRAM ATIVO';
+                showToast('🔔 Notificações do Telegram Retomadas!');
+            }
+        }
+
+        function syncTelegram() {
+            if (isTgPaused) {
+                showToast('⚠️ Despause o Telegram para receber alertas!');
+                return;
+            }
+            showToast('🔍 Disparando varredura para o @Paineletalz_bot...');
+            fetch('https://api.telegram.org/bot8946875162:AAFfyk40ZC8uj82cfu1F1HtmGcKT9UPQbEc/sendMessage?chat_id=8871279939&text=' + encodeURIComponent('🎫 Varredura solicitada pelo WebApp Mobile!'), { method: 'POST' }).catch(()=>{});
+        }
+
+        function openSOSModal() { document.getElementById('sos-modal').classList.add('active'); }
+        function closeSOSModal() { document.getElementById('sos-modal').classList.remove('active'); }
+        function openOfflineHub() { document.getElementById('offline-modal').classList.add('active'); }
+        function closeOfflineHub() { document.getElementById('offline-modal').classList.remove('active'); }
+        function openBreathingModal() { document.getElementById('breathing-modal').classList.add('active'); }
+        function closeBreathingModal() { document.getElementById('breathing-modal').classList.remove('active'); }
+
+        function toggleBreathing() {
+            const circle = document.getElementById('breath-circle');
+            const text = document.getElementById('breath-text');
+            if (isBreathing) {
+                clearInterval(breathInterval);
+                isBreathing = false;
+                circle.innerText = 'INICIAR';
+                circle.style.transform = 'scale(1)';
+                text.innerText = 'Pausado.';
+                return;
+            }
+            isBreathing = true;
+            let step = 0;
+            const phases = [
+                { text: 'INSPIRE (4s)', scale: '1.3' },
+                { text: 'SEGURE (4s)', scale: '1.3' },
+                { text: 'EXPIRE (4s)', scale: '0.85' },
+                { text: 'PAUSA (4s)', scale: '0.85' }
+            ];
+            const run = () => {
+                const p = phases[step % 4];
+                circle.innerText = p.text;
+                circle.style.transform = `scale(${p.scale})`;
+                text.innerText = `Fase ${ (step % 4) + 1 }/4`;
+                step++;
+            };
+            run();
+            breathInterval = setInterval(run, 4000);
+        }
+
+        function copyPitch() {
+            const client = document.getElementById('client-name').value || 'Cliente';
+            const pitch = `Olá ${client}, tudo bem?\n\nNotei que muitos clientes chamam vocês no WhatsApp fora do horário e acabam comprando no concorrente por falta de resposta rápida.\n\nEu implemento um Atendente com IA que roda 24h direto no número de vocês, tira dúvidas de cardápio/produtos e fecha pedidos na hora com linguagem natural.\n\nConsigo deixar rodando em 24h na sua empresa. Posso te enviar uma demonstração de 2 minutos?`;
+            navigator.clipboard.writeText(pitch).then(() => showToast('Pitch copiado!')).catch(() => showToast('Texto copiado!'));
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        }
+    </script>
+</body>
+</html>
