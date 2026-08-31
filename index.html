@@ -424,8 +424,8 @@
                 showToast('⚠️ Despause o Telegram para receber alertas!');
                 return;
             }
-            showToast('🔍 Disparando varredura para o @Paineletalz_bot...');
-            fetch('https://api.telegram.org/bot8946875162:AAFfyk40ZC8uj82cfu1F1HtmGcKT9UPQbEc/sendMessage?chat_id=8871279939&text=' + encodeURIComponent('🎫 Varredura solicitada pelo WebApp Mobile!'), { method: 'POST' }).catch(()=>{});
+            showToast('🔍 Varredura solicitada! Enviando para o bot...');
+            fetch('/api/sync-ingressos', { method: 'POST' }).catch(() => {});
         }
 
         function openSOSModal() { document.getElementById('sos-modal').classList.add('active'); }
