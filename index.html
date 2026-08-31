@@ -405,18 +405,37 @@
             showToast('Tamanho do texto: ' + Math.round(fontScale * 100) + '%');
         }
 
-        function toggleTelegramPause() {
-            isTgPaused = !isTgPaused;
+        function updateTgButtonUI(paused) {
+            isTgPaused = paused;
             const btn = document.getElementById('tg-pause-btn');
             if (isTgPaused) {
                 btn.className = 'btn-ctrl btn-telegram-paused';
                 btn.innerText = '🔕 TELEGRAM PAUSADO';
-                showToast('🔕 Notificações do Telegram Pausadas!');
             } else {
                 btn.className = 'btn-ctrl btn-telegram-active';
                 btn.innerText = '🔔 TELEGRAM ATIVO';
-                showToast('🔔 Notificações do Telegram Retomadas!');
             }
+        }
+
+        function loadTelegramStatus() {
+            fetch('/api/telegram/status')
+                .then(r => r.json())
+                .then(d => { updateTgButtonUI(d.paused); })
+                .catch(() => {});
+        }
+
+        function toggleTelegramPause() {
+            fetch('/api/telegram/toggle', { method: 'POST' })
+                .then(r => r.json())
+                .then(d => {
+                    updateTgButtonUI(d.paused);
+                    showToast(d.paused ? '🔕 Telegram Pausado na VPS!' : '🔔 Telegram Retomado na VPS!');
+                })
+                .catch(() => {
+                    isTgPaused = !isTgPaused;
+                    updateTgButtonUI(isTgPaused);
+                    showToast(isTgPaused ? '🔕 Telegram Pausado' : '🔔 Telegram Ativo');
+                });
         }
 
         function syncTelegram() {
@@ -424,9 +443,19 @@
                 showToast('⚠️ Despause o Telegram para receber alertas!');
                 return;
             }
-            showToast('🔍 Varredura solicitada! Enviando para o bot...');
-            fetch('/api/sync-ingressos', { method: 'POST' }).catch(() => {});
+            showToast('🔍 Varredura solicitada na VPS...');
+            fetch('/api/telegram/sync', { method: 'POST' })
+                .then(r => r.json())
+                .then(d => {
+                    if (d.error) showToast('⚠️ ' + d.error);
+                    else showToast('✅ Alerta enviado para o Telegram!');
+                })
+                .catch(() => {
+                    showToast('🔍 Varredura em andamento na VPS!');
+                });
         }
+
+        window.addEventListener('DOMContentLoaded', loadTelegramStatus);
 
         function openSOSModal() { document.getElementById('sos-modal').classList.add('active'); }
         function closeSOSModal() { document.getElementById('sos-modal').classList.remove('active'); }
